@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box,
   Button,
   VStack,
   InputGroup,
@@ -90,7 +89,6 @@ function Login() {
           ? "27vh"
           : ["40vh", "76vh", "76vh", "76vh", "67vh"]
       }
-      // height={["40vh", "76vh", "76vh", "76vh", "67vh"]}
       borderBottomLeftRadius="110px"
       backgroundPosition={[
         "center 55px, center",
