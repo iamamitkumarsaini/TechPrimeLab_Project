@@ -71,7 +71,8 @@ function AddProjects() {
     }
   };
 
-  console.log(width);
+  console.log("startDate", startDate);
+  console.log("endDate", endDate);
 
   return (
     <Stack
@@ -114,7 +115,7 @@ function AddProjects() {
         <Stack
           border={"0px solid red"}
           position={["relative", ""]}
-          width={"94%"}
+          width={["95%","96%","97%", "98%"]}
           alignSelf={["center", ""]}
           boxShadow={"md"}
           bgColor={"#fff"}
@@ -189,9 +190,9 @@ function AddProjects() {
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
                 >
-                  <option value="business">For Business</option>
-                  <option value="dealership">For Dealership</option>
-                  <option value="transport">For Transport</option>
+                  <option value="Business">For Business</option>
+                  <option value="Dealership">For Dealership</option>
+                  <option value="Transport">For Transport</option>
                 </Select>
               </VStack>
             </GridItem>
@@ -212,9 +213,9 @@ function AddProjects() {
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
                 >
-                  <option value="internal">Internal</option>
-                  <option value="external">External</option>
-                  <option value="vendor">Vendor</option>
+                  <option value="Internal">Internal</option>
+                  <option value="External">External</option>
+                  <option value="Vendor">Vendor</option>
                 </Select>
               </VStack>
             </GridItem>
@@ -235,11 +236,11 @@ function AddProjects() {
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
                 >
-                  <option value="filters">Filters</option>
-                  <option value="compressor">Compressor</option>
-                  <option value="pumps">Pumps</option>
-                  <option value="glass">Glass</option>
-                  <option value="water heater">Water Heater</option>
+                  <option value="Filters">Filters</option>
+                  <option value="Compressor">Compressor</option>
+                  <option value="Pumps">Pumps</option>
+                  <option value="Glass">Glass</option>
+                  <option value="Water Heater">Water Heater</option>
                 </Select>
               </VStack>
             </GridItem>
@@ -260,10 +261,10 @@ function AddProjects() {
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
                 >
-                  <option value="quality A">Quality A</option>
-                  <option value="quality B">Quality B</option>
-                  <option value="quality C">Quality C</option>
-                  <option value="quality D">Quality D</option>
+                  <option value="Quality A">Quality A</option>
+                  <option value="Quality B">Quality B</option>
+                  <option value="Quality C">Quality C</option>
+                  <option value="Quality D">Quality D</option>
                 </Select>
               </VStack>
             </GridItem>
@@ -284,9 +285,9 @@ function AddProjects() {
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
                 >
-                  <option value="high">High</option>
-                  <option value="medium">Medium</option>
-                  <option value="low">Low</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
                 </Select>
               </VStack>
             </GridItem>
@@ -307,11 +308,11 @@ function AddProjects() {
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
                 >
-                  <option value="strategy">Strategy</option>
-                  <option value="finance">Finance</option>
-                  <option value="quality">Quality</option>
-                  <option value="maintenance">Maintenance</option>
-                  <option value="store">Store</option>
+                  <option value="Strategy">Strategy</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Quality">Quality</option>
+                  <option value="Maintenance">Maintenance</option>
+                  <option value="Store">Store</option>
                 </Select>
               </VStack>
             </GridItem>
@@ -390,11 +391,11 @@ function AddProjects() {
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
                 >
-                  <option value="pune">Pune</option>
-                  <option value="mumbai">Mumbai</option>
-                  <option value="indore">Indore</option>
-                  <option value="jaipur">Jaipur</option>
-                  <option value="bengalore">Bengalore</option>
+                  <option value="Pune">Pune</option>
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Indore">Indore</option>
+                  <option value="Jaipur">Jaipur</option>
+                  <option value="Bengalore">Bengalore</option>
                 </Select>
               </VStack>
             </GridItem>
