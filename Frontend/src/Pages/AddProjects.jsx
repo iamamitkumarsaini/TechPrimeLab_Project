@@ -6,27 +6,49 @@ import {
   FormLabel,
   Grid,
   GridItem,
+  Image,
   Input,
-  InputGroup,
   Select,
   Stack,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import backgroundImage from "../assets/login-bg-1.svg";
 import logo from "../assets/Logo.svg";
 import VerticalBar from "../Components/VerticalBar";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import HorizontalBar from "../Components/HorizontalBar";
+import logout from "../assets/Logout.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { postProjectData } from "../Redux/AppReducer/action";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function AddProjects() {
   const [width, setWidth] = useState(() => window.innerWidth);
+
   const [title, setTitle] = useState("");
-  const [isTitleEmpty, setIsTitleEmpty] = useState(false);
+  const [formData, setFormData] = useState({
+    reason: "For Business",
+    type: "Internal",
+    divison: "Filters",
+    category: "Quality A",
+    priority: "High",
+    department: "Strategy",
+    location: "Pune",
+  });
+
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  const [isTitleEmpty, setIsTitleEmpty] = useState(false);
   const [isStartDateEmpty, setIsStartDateEmpty] = useState(false);
   const [isEndDateEmpty, setIsEndDateEmpty] = useState(false);
+
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleWidthChange = () => {
@@ -42,6 +64,20 @@ function AddProjects() {
     };
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  const handleSelectChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     setIsTitleEmpty(false);
@@ -50,12 +86,10 @@ function AddProjects() {
   const handleStartDate = (e) => {
     setStartDate(e.target.value);
   };
-  // console.log("Start Date", startDate)
 
   const handleEndDate = (e) => {
     setEndDate(e.target.value);
   };
-  // console.log("end date", endDate);
 
   const handleSubmit = () => {
     if (title.trim() === "") {
@@ -66,13 +100,47 @@ function AddProjects() {
     }
     if (endDate.trim() === "") {
       setIsEndDateEmpty(true);
-    } else if (startDate > endDate) {
-      alert("Start date is Greater than end date");
+    }
+    if (startDate > endDate) {
+      toast({
+        title: "Start Date Conflict",
+        description: "Start Date should be less than End Date",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
+    } else if (
+      title &&
+      formData.reason &&
+      formData.type &&
+      formData.divison &&
+      formData.category &&
+      formData.priority &&
+      formData.department &&
+      startDate &&
+      endDate &&
+      formData.location
+    ) {
+      formData.title = title;
+      formData.start_date = startDate;
+      formData.end_date = endDate;
+
+      dispatch(postProjectData(formData)).then(() => {
+        toast({
+          title: "New Project Created",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+          position: "top",
+        });
+
+        setTimeout(() => {
+          navigate("/projects");
+        }, 2000);
+      });
     }
   };
-
-  console.log("startDate", startDate);
-  console.log("endDate", endDate);
 
   return (
     <Stack
@@ -86,7 +154,7 @@ function AddProjects() {
       <Stack w={"full"}>
         <Stack
           bg={`
-            url(${width < 540 ? "" : logo}) top / 60px auto no-repeat,
+            url(${width < 863 ? "" : logo}) top / 60px auto no-repeat,
             url(${backgroundImage}) center / cover no-repeat
             `}
           width={"100%"}
@@ -97,6 +165,8 @@ function AddProjects() {
           position={["fixed", "static"]}
           zIndex={[4, 0]}
           top={[0, ""]}
+          direction={["row", "row", "column"]}
+          justifyContent={["space-between", "space-between", "normal"]}
         >
           <Text
             color={"white"}
@@ -105,17 +175,28 @@ function AddProjects() {
             mt={[-1, 4]}
             mb={5}
           >
-            <span>
-              <ChevronLeftIcon fontSize={"24px"} />
-            </span>
-            &nbsp; &nbsp; Create Project
+            <NavLink to={"/"}>
+              <span>
+                <ChevronLeftIcon fontSize={"24px"} />
+              </span>
+            </NavLink>
+            &nbsp; &nbsp; Project Listing
           </Text>
+
+          <Stack display={["block", "block", "none"]} pt={[-1, 6]} mb={5}>
+            <Image
+              _hover={{ cursor: "pointer" }}
+              onClick={handleLogout}
+              src={logout}
+              alt={"Logout"}
+            />
+          </Stack>
         </Stack>
 
         <Stack
           border={"0px solid red"}
           position={["relative", ""]}
-          width={["95%","96%","97%", "98%"]}
+          width={["95%", "96%", "97%", "98%"]}
           alignSelf={["center", ""]}
           boxShadow={"md"}
           bgColor={"#fff"}
@@ -189,6 +270,9 @@ function AddProjects() {
                   fontWeight={400}
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
+                  name="reason"
+                  value={formData.reason}
+                  onChange={handleSelectChange}
                 >
                   <option value="Business">For Business</option>
                   <option value="Dealership">For Dealership</option>
@@ -212,6 +296,9 @@ function AddProjects() {
                   fontWeight={400}
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
+                  name="type"
+                  value={formData.type}
+                  onChange={handleSelectChange}
                 >
                   <option value="Internal">Internal</option>
                   <option value="External">External</option>
@@ -235,6 +322,9 @@ function AddProjects() {
                   fontWeight={400}
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
+                  name="divison"
+                  value={formData.divison}
+                  onChange={handleSelectChange}
                 >
                   <option value="Filters">Filters</option>
                   <option value="Compressor">Compressor</option>
@@ -260,6 +350,9 @@ function AddProjects() {
                   fontWeight={400}
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
+                  name="category"
+                  value={formData.category}
+                  onChange={handleSelectChange}
                 >
                   <option value="Quality A">Quality A</option>
                   <option value="Quality B">Quality B</option>
@@ -284,6 +377,9 @@ function AddProjects() {
                   fontWeight={400}
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
+                  name="priority"
+                  value={formData.priority}
+                  onChange={handleSelectChange}
                 >
                   <option value="High">High</option>
                   <option value="Medium">Medium</option>
@@ -307,12 +403,16 @@ function AddProjects() {
                   fontWeight={400}
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
+                  name="department"
+                  value={formData.department}
+                  onChange={handleSelectChange}
                 >
                   <option value="Strategy">Strategy</option>
                   <option value="Finance">Finance</option>
                   <option value="Quality">Quality</option>
                   <option value="Maintenance">Maintenance</option>
                   <option value="Store">Store</option>
+                  <option value="HR">HR</option>
                 </Select>
               </VStack>
             </GridItem>
@@ -390,6 +490,9 @@ function AddProjects() {
                   fontWeight={400}
                   color={"blackAlpha.900"}
                   borderColor={"RGBA(0, 0, 0, 0.36)"}
+                  name="location"
+                  value={formData.location}
+                  onChange={handleSelectChange}
                 >
                   <option value="Pune">Pune</option>
                   <option value="Mumbai">Mumbai</option>

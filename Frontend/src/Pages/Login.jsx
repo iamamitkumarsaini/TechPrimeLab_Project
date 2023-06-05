@@ -10,11 +10,17 @@ import {
   Text,
   HStack,
   FormLabel,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import loginbg from "../assets/login-bg-1.svg";
 import logo from "../assets/Logo.svg";
 import "../Styles/Login.css";
+import { useDispatch, useSelector } from "react-redux";
+import { postLoginUser } from "../Redux/AuthReducer/action";
+import { useNavigate } from "react-router-dom";
+
+
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -23,8 +29,16 @@ function Login() {
   const [isEmailEmpty, setIsEmailEmpty] = useState(false);
   const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
 
+  const [isLogin, setIsLogin] = useState(false);
+
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
+
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.AuthReducer.userData);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -45,17 +59,32 @@ function Login() {
 
     if (email.trim() === "") {
       setIsEmailEmpty(true);
-    }
-    if (password.trim() === "") {
+    } else if (password.trim() === "") {
       setIsPasswordEmpty(true);
-    }
+    } else {
+      dispatch(postLoginUser({ email, password }))
+        .then(() => {
+          toast({
+            title: "Logged In successfully",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+            position: "top",
+          });
 
-    // Perform login logic here
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        })
+
+        .catch((err) => {
+          setIsLogin(true);
+        });
+    }
   };
 
   useEffect(() => {
     const handleHeightChange = () => {
-      // custom logic here
       setHeight(window.innerHeight);
     };
 
@@ -71,8 +100,6 @@ function Login() {
   useEffect(() => {
     setWidth(window.innerWidth);
   }, [height]);
-
-
 
   return (
     <Stack
@@ -207,7 +234,7 @@ function Login() {
       </VStack>
 
       <Text
-        display={["none", "block"]}
+        display={isLogin ? "block" : "none"}
         pt={5}
         pb={16}
         color={"red"}

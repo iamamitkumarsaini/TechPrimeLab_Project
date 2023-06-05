@@ -1,4 +1,5 @@
 import * as types from "./actionTypes";
+import axios from "axios";
 
 const getUserDataRequest = () => {
 
@@ -26,4 +27,24 @@ const getUserDataFailure = () => {
     }
 }
 
-export { getUserDataRequest, getUserDataSuccess, getUserDataFailure }
+
+const postLoginUser = (payload) => (dispatch) => {
+
+    dispatch(getUserDataRequest());
+
+    return axios.post(`https://successful-ruby-shoulder-pads.cyclic.app/login`,payload)
+    .then((res) => {
+        console.log("userLogin",res.data);
+        localStorage.setItem("token",JSON.stringify(res.data.token))
+        return dispatch(getUserDataSuccess([res.data]));
+    })
+    .catch((err) => {
+        console.log(err);
+        dispatch(getUserDataFailure());
+    })
+    
+}
+
+
+
+export { postLoginUser }

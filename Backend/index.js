@@ -19,12 +19,12 @@ app.use(express.json());
 
 app.get("/", (req,res) => {
     
-    res.status(200).send({"message": "Welcome to TechPrimeLab_Project"})
+    res.status(200).send({"message": "Welcome to TechPrimeLab_Project"});
 })
 
 app.use("/", userRoutes)
 
-// app.use(authentication);
+app.use(authentication);
 app.use("/", taskRoutes);
 
 
