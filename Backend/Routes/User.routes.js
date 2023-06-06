@@ -52,7 +52,7 @@ userRoutes.post("/login", async(req,res) => {
         if(match){
             const userInfo = {...user.toObject(), password: undefined};
             const token = jwt.sign(userInfo, process.env.secret_key, { expiresIn: "7d"});
-            res.status(201).send({token, "user": userInfo, "message": "Login successfully"});
+            res.status(201).send({token, "user": userInfo, "message": "Logged In successfully"});
         }
 
         else {
