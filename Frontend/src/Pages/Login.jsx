@@ -42,11 +42,13 @@ function Login() {
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
     setIsEmailEmpty(false);
+    setIsLogin(false);
   };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
     setIsPasswordEmpty(false);
+    setIsLogin(false);
   };
 
   const handleTogglePasswordVisibility = () => {
@@ -62,9 +64,10 @@ function Login() {
       setIsPasswordEmpty(true);
     } else {
       dispatch(postLoginUser({ email, password }))
-        .then(() => {
-          toast({
-            title: "Logged In successfully",
+        .then((res) => {
+          if(res.payload[0].message){
+            toast({
+            title: res.payload[0].message,
             status: "success",
             duration: 2000,
             isClosable: true,
@@ -73,7 +76,10 @@ function Login() {
 
           setTimeout(() => {
             navigate("/");
-          }, 2000);
+          },2000);
+          }
+
+          
         })
 
         .catch((err) => {
@@ -188,7 +194,7 @@ function Login() {
               justifyContent={!isPasswordEmpty ? "right" : "space-between"}
               w={"100%"}
             >
-              {isPasswordEmpty && (
+              {isPasswordEmpty  && (
                 <Text color="red.500" fontSize={"15px"} fontWeight={500}>
                   Password is required
                 </Text>
@@ -197,14 +203,11 @@ function Login() {
                 Forgot password?
               </Link>
             </HStack>
-            <Text
-              display={isLogin ? "block" : "none"}
-              color={"red"}
-              fontWeight={500}
-              fontSize={"15px"}
-            >
-              Invalid credentials
-            </Text>
+            {isLogin && (
+                <Text display={["block","block","none"]} color="red" fontSize={"15px"} fontWeight={500}>
+                  Invalid credentials
+                </Text>
+              )}
           </VStack>
           <InputRightElement mt={["26px"]}>
             <Button
@@ -232,16 +235,11 @@ function Login() {
         </Button>
       </VStack>
 
-      <Text
-        display={isLogin ? "block" : "none"}
-        pt={5}
-        pb={16}
-        color={"red"}
-        fontWeight={500}
-        fontSize={"15px"}
-      >
-        Invalid credentials
-      </Text>
+            {isLogin && (
+                <Text display={["none","none","block"]} pt={5} pb={16} color="red" fontSize={"15px"} fontWeight={500}>
+                  Invalid credentials
+                </Text>
+            )}
     </Stack>
   );
 }
