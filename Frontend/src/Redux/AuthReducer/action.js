@@ -34,7 +34,6 @@ const postLoginUser = (payload) => (dispatch) => {
 
     return axios.post(`https://successful-ruby-shoulder-pads.cyclic.app/login`,payload)
     .then((res) => {
-        console.log("userLogin",res.data);
         localStorage.setItem("token",JSON.stringify(res.data.token))
         return dispatch(getUserDataSuccess([res.data]));
     })

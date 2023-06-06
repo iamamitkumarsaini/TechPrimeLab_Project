@@ -156,7 +156,6 @@ const postProjectData = (payload) => (dispatch) => {
         
     })
     .then((res) => {
-        console.log("Project Added",res.data);
         return dispatch(postProjectDataSuccess([res.data]));
     })
     .catch((err) => {
@@ -179,8 +178,6 @@ const getProjectsData = (page,search,sort) => (dispatch) => {
         
     })
     .then((res) => {
-        console.log("Get Projects", res.data);
-
         const formattedData = res.data.projects.map((elem) => {
             return {
                 ...elem,
@@ -211,7 +208,6 @@ const updateProjectsData = (id,payload) => (dispatch) => {
         }
     })
     .then((res) => {
-        console.log("StatusUpdated", res.data);
         return dispatch(patchProjectDataSuccess([res.data]));
     })
     .catch((err) => {
@@ -233,7 +229,6 @@ const getProjectStats = () => (dispatch) => {
         }
     })
     .then((res) => {
-        console.log("Projects Stats",res.data);
         return dispatch(getProjectStatsSuccess([res.data]));
     })
     .catch((err) => {
@@ -254,7 +249,6 @@ const getDepartmentStats = () => (dispatch) => {
         }
     })
     .then((res) => {
-        console.log("Department Stats",res.data);
         return dispatch(getDepartmentStatsSuccess([res.data]));
     })
     .catch((err) => {

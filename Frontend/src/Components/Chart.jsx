@@ -10,9 +10,6 @@ const ApexChart = () => {
     (state) => state.AppReducer.departmentStats
   );
 
-  departmentStats.length > 0 && console.log(departmentStats[0].statCategory);
-  departmentStats.length > 0 && console.log(departmentStats[0].totalOnes);
-  departmentStats.length > 0 && console.log(departmentStats[0].closedOnes);
 
   useEffect(() => {
     dispatch(getDepartmentStats());

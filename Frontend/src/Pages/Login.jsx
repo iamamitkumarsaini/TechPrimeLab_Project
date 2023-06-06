@@ -21,7 +21,6 @@ import { postLoginUser } from "../Redux/AuthReducer/action";
 import { useNavigate } from "react-router-dom";
 
 
-
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -199,7 +198,7 @@ function Login() {
               </Link>
             </HStack>
             <Text
-              display={["", "none"]}
+              display={isLogin ? "block" : "none"}
               color={"red"}
               fontWeight={500}
               fontSize={"15px"}

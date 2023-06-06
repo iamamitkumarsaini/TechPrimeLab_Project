@@ -143,6 +143,7 @@ function Projects() {
     }
 
     navigate(`${location.pathname}?${searchParams.toString()}`);
+    handleClose()
   };
 
   const handleInputChange = (e) => {
@@ -324,7 +325,7 @@ function Projects() {
             </Stack>
 
             <Box display={["block", "block", "none"]}>
-              <BsFilterLeft fontSize={"2rem"} onClick={handleOpen} />
+              <BsFilterLeft _hover={{cursor:"pointer"}} fontSize={"2rem"} onClick={handleOpen} />
 
               <Modal
                 isOpen={isOpen}
@@ -344,40 +345,42 @@ function Projects() {
 
                   <ModalBody>
                     <Stack spacing={3} pb={2}>
-                      <Text data-value="" onClick={handleSelectChange}>
+                      <Text _hover={{cursor:"pointer"}} data-value="" onClick={handleSelectChange}>
                         Reset
                       </Text>
-                      <Text data-value="reason" onClick={handleSelectChange}>
+                      <Text _hover={{cursor:"pointer"}} data-value="reason" onClick={handleSelectChange}>
                         Reason
                       </Text>
-                      <Text data-value="type" onClick={handleSelectChange}>
+                      <Text _hover={{cursor:"pointer"}} data-value="type" onClick={handleSelectChange}>
                         Type
                       </Text>
-                      <Text data-value="divison" onClick={handleSelectChange}>
+                      <Text _hover={{cursor:"pointer"}} data-value="divison" onClick={handleSelectChange}>
                         Divison
                       </Text>
-                      <Text data-value="category" onClick={handleSelectChange}>
+                      <Text _hover={{cursor:"pointer"}} data-value="category" onClick={handleSelectChange}>
                         Category
                       </Text>
-                      <Text data-value="priority" onClick={handleSelectChange}>
+                      <Text _hover={{cursor:"pointer"}} data-value="priority" onClick={handleSelectChange}>
                         Priority
                       </Text>
                       <Text
+                        _hover={{cursor:"pointer"}}
                         data-value="department"
                         onClick={handleSelectChange}
                       >
                         Department
                       </Text>
                       <Text
+                        _hover={{cursor:"pointer"}}
                         data-value="start_date"
                         onClick={handleSelectChange}
                       >
                         Start Date
                       </Text>
-                      <Text data-value="location" onClick={handleSelectChange}>
+                      <Text _hover={{cursor:"pointer"}} data-value="location" onClick={handleSelectChange}>
                         Location
                       </Text>
-                      <Text data-value="_id" onClick={handleSelectChange}>
+                      <Text _hover={{cursor:"pointer"}} data-value="_id" onClick={handleSelectChange}>
                         Recently Added
                       </Text>
                     </Stack>
