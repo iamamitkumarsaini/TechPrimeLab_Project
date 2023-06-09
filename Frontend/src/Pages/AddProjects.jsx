@@ -85,7 +85,7 @@ function AddProjects() {
 
   const handleStartDate = (e) => {
     setStartDate(e.target.value);
-    setIsStartDateEmpty(false)
+    setIsStartDateEmpty(false);
   };
 
   const handleEndDate = (e) => {

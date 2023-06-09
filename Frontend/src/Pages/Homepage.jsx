@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Box, Flex, Heading, Image, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Image,
+  Skeleton,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import VerticalBar from "../Components/VerticalBar";
 import header from "../assets/Header-bg.svg";
 import logo from "../assets/Logo.svg";
@@ -10,11 +18,11 @@ import { getProjectStats } from "../Redux/AppReducer/action";
 import { useDispatch, useSelector } from "react-redux";
 import ApexChart from "../Components/Chart";
 
-
 function Homepage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const projectStats = useSelector((state) => state.AppReducer.projectStats);
+  const isLoading = useSelector((state) => state.AppReducer.isLoading);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -96,14 +104,18 @@ function Homepage() {
                 w={["35%", "35%", "24%", "19%"]}
                 py={[2, 3]}
                 px={[2, 5]}
-                spacing={0}
+                spacing={isLoading ? 4 : 0}
               >
                 <Text color={"GrayText"} fontSize={["14px", "16px"]}>
                   Total Proejcts
                 </Text>
-                <Heading color={"gray.700"}>
-                  {projectStats.length > 0 && projectStats[0].total_Projects}
-                </Heading>
+                {isLoading ? (
+                  <Skeleton height={"14px"} width={"100px"} mt={"50px"} />
+                ) : (
+                  <Heading color={"gray.700"}>
+                    {projectStats.length > 0 && projectStats[0].total_Projects}
+                  </Heading>
+                )}
               </Stack>
 
               <Stack
@@ -117,14 +129,18 @@ function Homepage() {
                 w={["35%", "35%", "24%", "19%"]}
                 py={[2, 3]}
                 px={[2, 5]}
-                spacing={0}
+                spacing={isLoading ? 4 : 0}
               >
                 <Text color={"GrayText"} fontSize={["14px", "16px"]}>
                   Closed
                 </Text>
-                <Heading color={"gray.700"}>
-                  {projectStats.length > 0 && projectStats[0].closed_Projects}
-                </Heading>
+                {isLoading ? (
+                  <Skeleton height={"14px"} width={"100px"} mt={"50px"} />
+                ) : (
+                  <Heading color={"gray.700"}>
+                    {projectStats.length > 0 && projectStats[0].closed_Projects}
+                  </Heading>
+                )}
               </Stack>
 
               <Stack
@@ -138,14 +154,19 @@ function Homepage() {
                 w={["35%", "35%", "24%", "19%"]}
                 py={[2, 3]}
                 px={[2, 5]}
-                spacing={0}
+                spacing={isLoading ? 4 : 0}
               >
                 <Text color={"GrayText"} fontSize={["14px", "16px"]}>
                   Running
                 </Text>
-                <Heading color={"gray.700"}>
-                  {projectStats.length > 0 && projectStats[0].running_Projects}
-                </Heading>
+                {isLoading ? (
+                  <Skeleton height={"14px"} width={"100px"} mt={"50px"} />
+                ) : (
+                  <Heading color={"gray.700"}>
+                    {projectStats.length > 0 &&
+                      projectStats[0].running_Projects}
+                  </Heading>
+                )}
               </Stack>
 
               <Stack
@@ -159,14 +180,18 @@ function Homepage() {
                 w={["35%", "35%", "24%", "19%"]}
                 py={[2, 3]}
                 px={[2, 5]}
-                spacing={0}
+                spacing={isLoading ? 4 : 0}
               >
                 <Text color={"GrayText"} fontSize={["14px", "16px"]}>
                   Closure Delay
                 </Text>
-                <Heading color={"gray.700"}>
-                  {projectStats.length > 0 && projectStats[0].closure_Delay}
-                </Heading>
+                {isLoading ? (
+                  <Skeleton height={"14px"} width={"100px"} mt={"50px"} />
+                ) : (
+                  <Heading color={"gray.700"}>
+                    {projectStats.length > 0 && projectStats[0].closure_Delay}
+                  </Heading>
+                )}
               </Stack>
 
               <Stack
@@ -180,15 +205,19 @@ function Homepage() {
                 w={["35%", "35%", "24%", "19%"]}
                 py={[2, 3]}
                 px={[2, 5]}
-                spacing={0}
+                spacing={isLoading ? 4 : 0}
               >
                 <Text color={"GrayText"} fontSize={["14px", "16px"]}>
                   Cancelled
                 </Text>
-                <Heading color={"gray.700"}>
-                  {projectStats.length > 0 &&
-                    projectStats[0].cancelled_Projects}
-                </Heading>
+                {isLoading ? (
+                  <Skeleton height={"14px"} width={"100px"} mt={"50px"} />
+                ) : (
+                  <Heading color={"gray.700"}>
+                    {projectStats.length > 0 &&
+                      projectStats[0].cancelled_Projects}
+                  </Heading>
+                )}
               </Stack>
             </Flex>
           </Flex>

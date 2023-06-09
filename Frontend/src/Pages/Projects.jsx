@@ -23,6 +23,10 @@ import {
   Thead,
   Tr,
   Image,
+  Spinner,
+  SkeletonText,
+  Skeleton,
+  HStack,
 } from "@chakra-ui/react";
 import VerticalBar from "../Components/VerticalBar";
 import { ChevronLeftIcon, Search2Icon } from "@chakra-ui/icons";
@@ -51,6 +55,7 @@ function Projects() {
   const initialPage = parseInt(queryParams.get("page")) || 1;
   const initialSort = queryParams.get("sort") || "";
   const initialSearch = queryParams.get("search") || "";
+  const [emptyArr, setEmptyArr] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
   const [page, setPage] = useState(initialPage);
   const [sort, setSort] = useState(initialSort);
@@ -59,6 +64,7 @@ function Projects() {
   const dispatch = useDispatch();
   const projects = useSelector((state) => state.AppReducer.projects);
   const totalCount = useSelector((state) => state.AppReducer.totalCount);
+  const isLoading = useSelector((state) => state.AppReducer.isLoading);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -143,7 +149,7 @@ function Projects() {
     }
 
     navigate(`${location.pathname}?${searchParams.toString()}`);
-    handleClose()
+    handleClose();
   };
 
   const handleInputChange = (e) => {
@@ -325,7 +331,11 @@ function Projects() {
             </Stack>
 
             <Box display={["block", "block", "none"]}>
-              <BsFilterLeft _hover={{cursor:"pointer"}} fontSize={"2rem"} onClick={handleOpen} />
+              <BsFilterLeft
+                _hover={{ cursor: "pointer" }}
+                fontSize={"2rem"}
+                onClick={handleOpen}
+              />
 
               <Modal
                 isOpen={isOpen}
@@ -345,42 +355,74 @@ function Projects() {
 
                   <ModalBody>
                     <Stack spacing={3} pb={2}>
-                      <Text _hover={{cursor:"pointer"}} data-value="" onClick={handleSelectChange}>
+                      <Text
+                        _hover={{ cursor: "pointer" }}
+                        data-value=""
+                        onClick={handleSelectChange}
+                      >
                         Reset
                       </Text>
-                      <Text _hover={{cursor:"pointer"}} data-value="reason" onClick={handleSelectChange}>
+                      <Text
+                        _hover={{ cursor: "pointer" }}
+                        data-value="reason"
+                        onClick={handleSelectChange}
+                      >
                         Reason
                       </Text>
-                      <Text _hover={{cursor:"pointer"}} data-value="type" onClick={handleSelectChange}>
+                      <Text
+                        _hover={{ cursor: "pointer" }}
+                        data-value="type"
+                        onClick={handleSelectChange}
+                      >
                         Type
                       </Text>
-                      <Text _hover={{cursor:"pointer"}} data-value="divison" onClick={handleSelectChange}>
+                      <Text
+                        _hover={{ cursor: "pointer" }}
+                        data-value="divison"
+                        onClick={handleSelectChange}
+                      >
                         Divison
                       </Text>
-                      <Text _hover={{cursor:"pointer"}} data-value="category" onClick={handleSelectChange}>
+                      <Text
+                        _hover={{ cursor: "pointer" }}
+                        data-value="category"
+                        onClick={handleSelectChange}
+                      >
                         Category
                       </Text>
-                      <Text _hover={{cursor:"pointer"}} data-value="priority" onClick={handleSelectChange}>
+                      <Text
+                        _hover={{ cursor: "pointer" }}
+                        data-value="priority"
+                        onClick={handleSelectChange}
+                      >
                         Priority
                       </Text>
                       <Text
-                        _hover={{cursor:"pointer"}}
+                        _hover={{ cursor: "pointer" }}
                         data-value="department"
                         onClick={handleSelectChange}
                       >
                         Department
                       </Text>
                       <Text
-                        _hover={{cursor:"pointer"}}
+                        _hover={{ cursor: "pointer" }}
                         data-value="start_date"
                         onClick={handleSelectChange}
                       >
                         Start Date
                       </Text>
-                      <Text _hover={{cursor:"pointer"}} data-value="location" onClick={handleSelectChange}>
+                      <Text
+                        _hover={{ cursor: "pointer" }}
+                        data-value="location"
+                        onClick={handleSelectChange}
+                      >
                         Location
                       </Text>
-                      <Text _hover={{cursor:"pointer"}} data-value="_id" onClick={handleSelectChange}>
+                      <Text
+                        _hover={{ cursor: "pointer" }}
+                        data-value="_id"
+                        onClick={handleSelectChange}
+                      >
                         Recently Added
                       </Text>
                     </Stack>
@@ -407,210 +449,358 @@ function Projects() {
                   </Tr>
                 </Thead>
 
-                <Tbody>
-                  {projects?.map((elem) => (
-                    <Tr key={elem._id} verticalAlign={"top"}>
-                      <Td p={0} py={3}>
-                        <Text
-                          w={"max-content"}
-                          fontSize={"16px"}
-                          mb={"5px"}
-                          fontWeight={600}
-                        >
-                          {elem.title}
-                        </Text>
-                        <Stack
-                          w={"max-content"}
-                          direction={"row"}
-                          fontSize={"15px"}
-                          spacing={1}
-                        >
-                          <Text w={"max-content"}>{elem.start_date}</Text>
-                          <Text w={"max-content"}>to</Text>
-                          <Text w={"max-content"}> {elem.end_date}</Text>
-                        </Stack>
-                      </Td>
-                      <Td pt={3}>{elem.reason}</Td>
-                      <Td pt={3}>{elem.type}</Td>
-                      <Td pt={3}>{elem.divison}</Td>
-                      <Td pt={3}>{elem.category}</Td>
-                      <Td pt={3}>{elem.priority}</Td>
-                      <Td pt={3}>{elem.department}</Td>
-                      <Td pt={3}>{elem.location}</Td>
-                      <Td pt={3}>{elem.status}</Td>
-                      <Td px={0} pt={2}>
-                        <Button
-                          h={"30px"}
-                          onClick={() => handleStartChange(elem._id)}
-                          px={6}
-                          borderRadius={24}
-                          fontSize={"16px"}
-                          fontWeight={400}
-                          letterSpacing={0.6}
-                          colorScheme="blue"
-                        >
-                          Start
-                        </Button>
-                      </Td>
-                      <Td px={[0, 2, 2, 2, 2]} pt={2}>
-                        <Button
-                          colorScheme="white"
-                          onClick={() => handleCloseChange(elem._id)}
-                          h={"28px"}
-                          px={4}
-                          borderRadius={24}
-                          fontSize={"16px"}
-                          fontWeight={400}
-                          letterSpacing={0.6}
-                          border={"1px solid blue"}
-                          color={"blue.500"}
-                        >
-                          Close
-                        </Button>
-                      </Td>
-                      <Td px={0} pt={2}>
-                        <Button
-                          colorScheme="white"
-                          h={"28px"}
-                          onClick={() => handleCancelChange(elem._id)}
-                          px={3}
-                          borderRadius={24}
-                          fontSize={"16px"}
-                          fontWeight={400}
-                          letterSpacing={0.6}
-                          border={"1px solid blue"}
-                          color={"blue.500"}
-                        >
-                          Cancel
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
+                {isLoading ? (
+                  <Tbody>
+                    {" "}
+                    {emptyArr.map((elem, index) => (
+                      <Tr height={"50px"} key={index}>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} width={"70px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} width={"70px"} />
+                        </Td>
+                        <Td>
+                          <Skeleton height={"10px"} width={"70px"} />
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                ) : (
+                  <Tbody>
+                    {projects?.map((elem) => (
+                      <Tr key={elem._id} verticalAlign={"top"}>
+                        <Td p={0} py={3}>
+                          <Text
+                            w={"max-content"}
+                            fontSize={"16px"}
+                            mb={"5px"}
+                            fontWeight={600}
+                          >
+                            {elem.title}
+                          </Text>
+                          <Stack
+                            w={"max-content"}
+                            direction={"row"}
+                            fontSize={"15px"}
+                            spacing={1}
+                          >
+                            <Text w={"max-content"}>{elem.start_date}</Text>
+                            <Text w={"max-content"}>to</Text>
+                            <Text w={"max-content"}> {elem.end_date}</Text>
+                          </Stack>
+                        </Td>
+                        <Td pt={3}>{elem.reason}</Td>
+                        <Td pt={3}>{elem.type}</Td>
+                        <Td pt={3}>{elem.divison}</Td>
+                        <Td pt={3}>{elem.category}</Td>
+                        <Td pt={3}>{elem.priority}</Td>
+                        <Td pt={3}>{elem.department}</Td>
+                        <Td pt={3}>{elem.location}</Td>
+                        <Td pt={3}>{elem.status}</Td>
+                        <Td px={0} pt={2}>
+                          <Button
+                            h={"30px"}
+                            onClick={() => handleStartChange(elem._id)}
+                            px={6}
+                            borderRadius={24}
+                            fontSize={"16px"}
+                            fontWeight={400}
+                            letterSpacing={0.6}
+                            colorScheme="blue"
+                          >
+                            Start
+                          </Button>
+                        </Td>
+                        <Td px={[0, 2, 2, 2, 2]} pt={2}>
+                          <Button
+                            colorScheme="white"
+                            onClick={() => handleCloseChange(elem._id)}
+                            h={"28px"}
+                            px={4}
+                            borderRadius={24}
+                            fontSize={"16px"}
+                            fontWeight={400}
+                            letterSpacing={0.6}
+                            border={"1px solid blue"}
+                            color={"blue.500"}
+                          >
+                            Close
+                          </Button>
+                        </Td>
+                        <Td px={0} pt={2}>
+                          <Button
+                            colorScheme="white"
+                            h={"28px"}
+                            onClick={() => handleCancelChange(elem._id)}
+                            px={3}
+                            borderRadius={24}
+                            fontSize={"16px"}
+                            fontWeight={400}
+                            letterSpacing={0.6}
+                            border={"1px solid blue"}
+                            color={"blue.500"}
+                          >
+                            Cancel
+                          </Button>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                )}
               </Table>
             </TableContainer>
           </Stack>
 
-          <Stack display={["block", "block", "none"]} pb={6}>
-            {projects?.map((elem) => (
-              <Stack
-                key={elem._id}
-                boxShadow="rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px"
-                borderRadius={12}
-                p={4}
-                spacing={2}
-              >
-                <Stack border={"0px solid red"} spacing={0}>
-                  <Stack direction={"row"} justifyContent={"space-between"}>
-                    <Text fontSize={"18px"} fontWeight={600}>
-                      {elem.title}
+          {isLoading ? (
+            <Stack display={["block", "block", "none"]} pb={6}>
+              {emptyArr.map((elem, index) => (
+                <Stack
+                  key={index}
+                  boxShadow="rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px"
+                  borderRadius={12}
+                  p={4}
+                  spacing={2}
+                >
+                  <Stack border={"0px solid red"} spacing={2}>
+                    <Stack direction={"row"} justifyContent={"space-between"}>
+                      <Text>
+                        <Skeleton width={"160px"} height={"18px"} />
+                      </Text>
+                      <Text>
+                        <Skeleton height={"14px"} width={"80px"} />
+                      </Text>
+                    </Stack>
+                    <Skeleton width={"200px"} height={"10px"} />
+                  </Stack>
+
+                  <Stack border={"0px solid red"} spacing={[2]}>
+                    <Text color={"GrayText"} fontSize={["16px"]}>
+                      Reason:
+                      <span style={{ color: "black" }}>
+                        <Skeleton height={"12px"} width={"120px"} />
+                      </span>
                     </Text>
-                    <Text fontSize={"16px"} fontWeight={600}>
-                      {elem.status}
+
+                    <Flex gap={8}>
+                      <HStack>
+                        <Text color={"GrayText"} fontSize={["16px"]}>
+                          Type:
+                        </Text>
+                        <Text>
+                          <Skeleton height={"12px"} width={"120px"} />
+                        </Text>
+                      </HStack>
+                      <Box color={"GrayText"} fontSize={["16px"]}>
+                        <ul>
+                          <li>
+                            <HStack>
+                              <Text color={"GrayText"} fontSize={["16px"]}>
+                                Category
+                              </Text>
+                              <Skeleton height={"12px"} width={"120px"} />
+                            </HStack>
+                          </li>
+                        </ul>
+                      </Box>
+                    </Flex>
+
+                    <Flex gap={8}>
+                      <HStack>
+                        <Text color={"GrayText"} fontSize={["16px"]}>
+                          Div:
+                        </Text>
+                        <Text>
+                          <Skeleton height={"12px"} width={"120px"} />
+                        </Text>
+                      </HStack>
+                      <Box color={"GrayText"} fontSize={["16px"]}>
+                        <ul>
+                          <li>
+                            <HStack>
+                              <Text color={"GrayText"} fontSize={["16px"]}>
+                                Department
+                              </Text>
+                              <Skeleton height={"12px"} width={"120px"} />
+                            </HStack>
+                          </li>
+                        </ul>
+                      </Box>
+                    </Flex>
+
+                    <HStack>
+                      <Text color={"GrayText"} fontSize={["16px"]}>
+                        Location:
+                      </Text>
+                      <Skeleton height={"12px"} width={"120px"} />
+                    </HStack>
+
+                    <HStack>
+                      <Text color={"GrayText"} fontSize={["16px"]}>
+                        Priority:
+                      </Text>
+                      <Skeleton height={"12px"} width={"120px"} />
+                    </HStack>
+                  </Stack>
+
+                  <Flex gap={[2, 4]} alignSelf={"center"}>
+                    <Skeleton height={"12px"} width={"90px"} />
+                    <Skeleton height={"12px"} width={"90px"} />
+                    <Skeleton height={"12px"} width={"90px"} />
+                  </Flex>
+                </Stack>
+              ))}
+            </Stack>
+          ) : (
+            <Stack display={["block", "block", "none"]} pb={6}>
+              {projects.map((elem) => (
+                <Stack
+                  key={elem._id}
+                  boxShadow="rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px"
+                  borderRadius={12}
+                  p={4}
+                  spacing={2}
+                >
+                  <Stack border={"0px solid red"} spacing={0}>
+                    <Stack direction={"row"} justifyContent={"space-between"}>
+                      <Text fontSize={"18px"} fontWeight={600}>
+                        {elem.title}
+                      </Text>
+                      <Text fontSize={"16px"} fontWeight={600}>
+                        {elem.status}
+                      </Text>
+                    </Stack>
+
+                    <Stack direction={"row"} fontSize={"15px"} spacing={1}>
+                      <Text>{elem.start_date}</Text>
+                      <Text>to</Text>
+                      <Text> {elem.end_date}</Text>
+                    </Stack>
+                  </Stack>
+
+                  <Stack border={"0px solid red"} spacing={[2]}>
+                    <Text color={"GrayText"} fontSize={["16px"]}>
+                      Reason:{" "}
+                      <span style={{ color: "black" }}>{elem.reason}</span>
+                    </Text>
+
+                    <Flex gap={8}>
+                      <Text color={"GrayText"} fontSize={["16px"]}>
+                        Type:{" "}
+                        <span style={{ color: "black" }}>{elem.type}</span>
+                      </Text>
+                      <Box color={"GrayText"} fontSize={["16px"]}>
+                        <ul>
+                          <li>
+                            Category:{" "}
+                            <span style={{ color: "black" }}>
+                              {elem.category}
+                            </span>
+                          </li>
+                        </ul>
+                      </Box>
+                    </Flex>
+
+                    <Flex gap={8}>
+                      <Text color={"GrayText"} fontSize={["16px"]}>
+                        Div:{" "}
+                        <span style={{ color: "black" }}>{elem.divison}</span>
+                      </Text>
+                      <Box color={"GrayText"} fontSize={["16px"]}>
+                        <ul>
+                          <li>
+                            Dept:{" "}
+                            <span style={{ color: "black" }}>
+                              {elem.department}
+                            </span>
+                          </li>
+                        </ul>
+                      </Box>
+                    </Flex>
+
+                    <Text color={"GrayText"} fontSize={["16px"]}>
+                      Location:{" "}
+                      <span style={{ color: "black" }}>{elem.location}</span>
+                    </Text>
+                    <Text color={"GrayText"} fontSize={["16px"]}>
+                      Priority:{" "}
+                      <span style={{ color: "black" }}>{elem.priority}</span>
                     </Text>
                   </Stack>
 
-                  <Stack direction={"row"} fontSize={"15px"} spacing={1}>
-                    <Text>{elem.start_date}</Text>
-                    <Text>to</Text>
-                    <Text> {elem.end_date}</Text>
-                  </Stack>
-                </Stack>
-
-                <Stack border={"0px solid red"} spacing={[2]}>
-                  <Text color={"GrayText"} fontSize={["16px"]}>
-                    Reason:{" "}
-                    <span style={{ color: "black" }}>{elem.reason}</span>
-                  </Text>
-
-                  <Flex gap={8}>
-                    <Text color={"GrayText"} fontSize={["16px"]}>
-                      Type: <span style={{ color: "black" }}>{elem.type}</span>
-                    </Text>
-                    <Box color={"GrayText"} fontSize={["16px"]}>
-                      <ul>
-                        <li>
-                          Category:{" "}
-                          <span style={{ color: "black" }}>
-                            {elem.category}
-                          </span>
-                        </li>
-                      </ul>
-                    </Box>
+                  <Flex gap={[2, 4]} alignSelf={"center"}>
+                    <Button
+                      h={"30px"}
+                      px={[4, 6]}
+                      onClick={() => handleStartChange(elem._id)}
+                      borderRadius={24}
+                      fontSize={["14px", "16px"]}
+                      fontWeight={400}
+                      letterSpacing={0.6}
+                      colorScheme="blue"
+                    >
+                      Start
+                    </Button>
+                    <Button
+                      h={"30px"}
+                      px={[4, 6]}
+                      onClick={() => handleCloseChange(elem._id)}
+                      borderRadius={24}
+                      fontSize={["14px", "16px"]}
+                      fontWeight={400}
+                      letterSpacing={0.6}
+                      colorScheme="white"
+                      border={"1px solid blue"}
+                      color={"blue.500"}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      h={"30px"}
+                      px={[4, 6]}
+                      onClick={() => handleCancelChange(elem._id)}
+                      borderRadius={24}
+                      fontSize={["14px", "16px"]}
+                      fontWeight={400}
+                      letterSpacing={0.6}
+                      colorScheme="white"
+                      border={"1px solid blue"}
+                      color={"blue.500"}
+                    >
+                      Cancel
+                    </Button>
                   </Flex>
-
-                  <Flex gap={8}>
-                    <Text color={"GrayText"} fontSize={["16px"]}>
-                      Div:{" "}
-                      <span style={{ color: "black" }}>{elem.divison}</span>
-                    </Text>
-                    <Box color={"GrayText"} fontSize={["16px"]}>
-                      <ul>
-                        <li>
-                          Dept:{" "}
-                          <span style={{ color: "black" }}>
-                            {elem.department}
-                          </span>
-                        </li>
-                      </ul>
-                    </Box>
-                  </Flex>
-
-                  <Text color={"GrayText"} fontSize={["16px"]}>
-                    Location:{" "}
-                    <span style={{ color: "black" }}>{elem.location}</span>
-                  </Text>
-                  <Text color={"GrayText"} fontSize={["16px"]}>
-                    Priority:{" "}
-                    <span style={{ color: "black" }}>{elem.priority}</span>
-                  </Text>
                 </Stack>
-
-                <Flex gap={[2, 4]} alignSelf={"center"}>
-                  <Button
-                    h={"30px"}
-                    px={[4, 6]}
-                    onClick={() => handleStartChange(elem._id)}
-                    borderRadius={24}
-                    fontSize={["14px", "16px"]}
-                    fontWeight={400}
-                    letterSpacing={0.6}
-                    colorScheme="blue"
-                  >
-                    Start
-                  </Button>
-                  <Button
-                    h={"30px"}
-                    px={[4, 6]}
-                    onClick={() => handleCloseChange(elem._id)}
-                    borderRadius={24}
-                    fontSize={["14px", "16px"]}
-                    fontWeight={400}
-                    letterSpacing={0.6}
-                    colorScheme="white"
-                    border={"1px solid blue"}
-                    color={"blue.500"}
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    h={"30px"}
-                    px={[4, 6]}
-                    onClick={() => handleCancelChange(elem._id)}
-                    borderRadius={24}
-                    fontSize={["14px", "16px"]}
-                    fontWeight={400}
-                    letterSpacing={0.6}
-                    colorScheme="white"
-                    border={"1px solid blue"}
-                    color={"blue.500"}
-                  >
-                    Cancel
-                  </Button>
-                </Flex>
-              </Stack>
-            ))}
-          </Stack>
+              ))}
+            </Stack>
+          )}
 
           <Stack
             align={"center"}
