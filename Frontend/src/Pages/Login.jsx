@@ -11,6 +11,7 @@ import {
   HStack,
   FormLabel,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import loginbg from "../assets/login-bg-1.svg";
@@ -37,7 +38,8 @@ function Login() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.AuthReducer.userData);
+  const isLoading = useSelector((state) => state.AuthReducer.isLoading);
+
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -60,12 +62,12 @@ function Login() {
 
     if (email.trim() === "") {
       setIsEmailEmpty(true);
-    } else if (password.trim() === "") {
+    }  if (password.trim() === "") {
       setIsPasswordEmpty(true);
     } else {
       dispatch(postLoginUser({ email, password }))
         .then((res) => {
-          if(res.payload[0].message){
+          if(res.payload[0].message === "Logged In successfully"){
             toast({
             title: res.payload[0].message,
             status: "success",
@@ -74,16 +76,18 @@ function Login() {
             position: "top",
           });
 
-          setTimeout(() => {
-            navigate("/");
-          },2000);
+            setTimeout(() => {
+              navigate("/");
+            },2000);
           }
 
+          else {
+            setIsLogin(true);
+          }
           
         })
-
         .catch((err) => {
-          setIsLogin(true);
+          console.log(err);
         });
     }
   };
@@ -223,16 +227,18 @@ function Login() {
             </Button>
           </InputRightElement>
         </InputGroup>
-        <Button
-          colorScheme="blue"
-          px={[0, 16]}
-          width={["100%", "auto"]}
-          borderRadius={24}
-          h={"40px"}
-          onClick={handleSubmit}
-        >
-          Login
-        </Button>
+        {
+          isLoading ? (<Spinner size={"md"} />) : (<Button
+            colorScheme="blue"
+            px={[0, 16]}
+            width={["100%", "auto"]}
+            borderRadius={24}
+            h={"40px"}
+            onClick={handleSubmit}
+          >
+            Login
+          </Button>)
+        }
       </VStack>
 
             {isLogin && (

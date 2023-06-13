@@ -177,23 +177,13 @@ function Projects() {
     navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
-  const handleStartChange = (id) => {
-    dispatch(updateProjectsData(id, { status: "Running" })).then(() => {
+  const handleStatusChange = (event,id) => {
+    const status = event.target.value;
+    dispatch(updateProjectsData(id, { status })).then(() => {
       dispatch(getProjectsData(page, search, sort));
     });
   };
 
-  const handleCloseChange = (id) => {
-    dispatch(updateProjectsData(id, { status: "Closed" })).then(() => {
-      dispatch(getProjectsData(page, search, sort));
-    });
-  };
-
-  const handleCancelChange = (id) => {
-    dispatch(updateProjectsData(id, { status: "Cancelled" })).then(() => {
-      dispatch(getProjectsData(page, search, sort));
-    });
-  };
 
   useEffect(() => {
     const handleWidthChange = () => {
@@ -528,7 +518,8 @@ function Projects() {
                         <Td px={0} pt={2}>
                           <Button
                             h={"30px"}
-                            onClick={() => handleStartChange(elem._id)}
+                            value={"Running"}
+                            onClick={(event) => handleStatusChange(event,elem._id)}
                             px={6}
                             borderRadius={24}
                             fontSize={"16px"}
@@ -542,7 +533,8 @@ function Projects() {
                         <Td px={[0, 2, 2, 2, 2]} pt={2}>
                           <Button
                             colorScheme="white"
-                            onClick={() => handleCloseChange(elem._id)}
+                            value={"Closed"}
+                            onClick={(event) => handleStatusChange(event,elem._id)}
                             h={"28px"}
                             px={4}
                             borderRadius={24}
@@ -559,7 +551,8 @@ function Projects() {
                           <Button
                             colorScheme="white"
                             h={"28px"}
-                            onClick={() => handleCancelChange(elem._id)}
+                            value={"Cancelled"}
+                            onClick={(event) => handleStatusChange(event,elem._id)}
                             px={3}
                             borderRadius={24}
                             fontSize={"16px"}
@@ -759,7 +752,8 @@ function Projects() {
                     <Button
                       h={"30px"}
                       px={[4, 6]}
-                      onClick={() => handleStartChange(elem._id)}
+                      value={"Running"}
+                      onClick={(event) => handleStatusChange(event,elem._id)}
                       borderRadius={24}
                       fontSize={["14px", "16px"]}
                       fontWeight={400}
@@ -771,7 +765,8 @@ function Projects() {
                     <Button
                       h={"30px"}
                       px={[4, 6]}
-                      onClick={() => handleCloseChange(elem._id)}
+                      value={"Closed"}
+                      onClick={(event) => handleStatusChange(event,elem._id)}
                       borderRadius={24}
                       fontSize={["14px", "16px"]}
                       fontWeight={400}
@@ -785,7 +780,8 @@ function Projects() {
                     <Button
                       h={"30px"}
                       px={[4, 6]}
-                      onClick={() => handleCancelChange(elem._id)}
+                      value={"Cancelled"}
+                      onClick={(event) => handleStatusChange(event,elem._id)}
                       borderRadius={24}
                       fontSize={["14px", "16px"]}
                       fontWeight={400}

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Container,
   FormLabel,
   Grid,
   GridItem,
   Image,
   Input,
   Select,
+  Spinner,
   Stack,
   Text,
   VStack,
@@ -49,6 +49,7 @@ function AddProjects() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.AppReducer.isLoading)
 
   useEffect(() => {
     const handleWidthChange = () => {
@@ -230,19 +231,23 @@ function AddProjects() {
               )}
             </VStack>
 
-            <Button
-              display={["none", "block"]}
-              fontWeight={400}
-              fontSize={"16px"}
-              px={8}
-              borderRadius={20}
-              h={"35px"}
-              colorScheme="blue"
-              color={"white"}
-              onClick={handleSubmit}
-            >
-              Save Project
-            </Button>
+            {
+              isLoading ? (<Box px={16} ><Spinner size={"md"} /></Box>) : (<Button
+                display={["none", "block"]}
+                fontWeight={400}
+                fontSize={"16px"}
+                px={8}
+                borderRadius={20}
+                h={"35px"}
+                colorScheme="blue"
+                color={"white"}
+                onClick={handleSubmit}
+              >
+                Save Project
+              </Button>)
+            }
+
+
           </Stack>
 
           <Grid
@@ -523,20 +528,22 @@ function AddProjects() {
         </Stack>
 
         <Stack display={["block", "none"]} align={"center"} px={8}>
-          <Button
-            fontWeight={400}
-            fontSize={"16px"}
-            px={8}
-            width={"100%"}
-            mb={24}
-            borderRadius={20}
-            h={"45px"}
-            colorScheme="blue"
-            color={"white"}
-            onClick={handleSubmit}
-          >
-            Save Project
-          </Button>
+          {
+            isLoading ? (<Spinner size={"md"} mt={6} mx={"45%"} mb={24} />) : (<Button
+              fontWeight={400}
+              fontSize={"16px"}
+              px={8}
+              width={"100%"}
+              mb={24}
+              borderRadius={20}
+              h={"45px"}
+              colorScheme="blue"
+              color={"white"}
+              onClick={handleSubmit}
+            >
+              Save Project
+            </Button>)
+          }
         </Stack>
       </Stack>
 

@@ -16,7 +16,7 @@ userRoutes.post("/signup", async(req,res) => {
     const userEmail = await UserModel.findOne({email});
 
     if(userEmail){
-        res.status(409).send({"message":"This Email is already registered"});
+        res.send({"message":"This Email is already registered"});
     }
 
     else{
@@ -30,7 +30,7 @@ userRoutes.post("/signup", async(req,res) => {
         
         catch (err) {
             console.log(err);
-            res.status(500).send("Internal Server Error");
+            res.send("Internal Server Error");
         }
     }
 })
@@ -44,7 +44,7 @@ userRoutes.post("/login", async(req,res) => {
         const user = await UserModel.findOne({email});
 
         if(!user){
-            return res.status(403).send({ "message": "Invalid credentials" });
+            return res.send({ "message": "Invalid credentials" });
         }
 
         const match = await bcrypt.compare(password, user.password);
@@ -56,13 +56,13 @@ userRoutes.post("/login", async(req,res) => {
         }
 
         else {
-            res.status(403).send({ "message": "Invalid credentials" });
+            res.send({ "message": "Invalid credentials" });
         }
     } 
     
     catch (err) {
         console.log(err);
-        res.status(500).send("Internal Server Error");
+        res.send("Internal Server Error");
     }
 })
 

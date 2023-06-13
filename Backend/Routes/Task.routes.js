@@ -75,7 +75,7 @@ taskRoutes.get("/projects", async (req, res) => {
   
   catch (err) {
     console.log(err);
-    res.status(500).send({ message: "Internal Server Error" });
+    res.send({ message: "Internal Server Error" });
   }
 });
 
@@ -95,7 +95,7 @@ taskRoutes.post("/add/project", async(req,res) => {
     
     catch (err) {
         console.log(err);
-        res.status(500).send("Internal Server Error");
+        res.send("Internal Server Error");
     }
 })
 
@@ -108,7 +108,7 @@ taskRoutes.patch("/project/:id", async(req,res) => {
         const newTask = await TaskModel.findByIdAndUpdate(id,{status}, {new: true});
 
         if(!newTask){
-            return res.status(404).send({"message": 'Project not found' });
+            return res.send({"message": 'Project not found' });
         }
 
         res.status(200).send({"message":"Status updated successfully", "updatedTask": newTask});  
@@ -116,7 +116,7 @@ taskRoutes.patch("/project/:id", async(req,res) => {
     
     catch (err) {
         console.log(err);
-        res.status(500).send("Internal Server Error");
+        res.send("Internal Server Error");
     }
 })
 
@@ -138,7 +138,7 @@ taskRoutes.get("/projects/stats", async(req,res) => {
   
   catch (err) {
     console.log(err);
-    res.status(500).send("Internal Server Error");
+    res.send("Internal Server Error");
   }
 })
 
@@ -147,35 +147,33 @@ taskRoutes.get("/projects/departments", async(req,res) => {
 
   try {
     
-    const totalStrategy = await TaskModel.countDocuments({department:"Strategy"});
-    const strategyClosed = await TaskModel.countDocuments({ department: "Strategy", status: "Closed" });
+    const departments = {
+      Strategy: 'STR',
+      Finance: 'FIN',
+      Quality: 'QLT',
+      Maintenance: 'MAN',
+      Store: 'STO',
+      HR: 'HR'
+    };
 
-    const totalFinance = await TaskModel.countDocuments({department:"Finance"});
-    const financeClosed = await TaskModel.countDocuments({ department: "Finance", status: "Closed" });
+    let totalOnes = [];
+    let closedOnes = [];
 
-    const totalQuality = await TaskModel.countDocuments({department:"Quality"});
-    const qualityClosed = await TaskModel.countDocuments({ department: "Quality", status: "Closed" });
+    for (const department in departments) {
+      const total = await TaskModel.countDocuments({ department });
+      const closed = await TaskModel.countDocuments({ department, status: 'Closed' });
+      totalOnes.push(total);
+      closedOnes.push(closed);
+    }
 
-    const totalMaint = await TaskModel.countDocuments({department:"Maintenance"});
-    const maintClosed = await TaskModel.countDocuments({ department: "Maintenance", status: "Closed" });
+    const statCategory = Object.values(departments);
 
-    const totalStore = await TaskModel.countDocuments({department:"Store"});
-    const storeClosed = await TaskModel.countDocuments({ department: "Store", status: "Closed" });
-
-    const totalHR = await TaskModel.countDocuments({department:"HR"});
-    const hrClosed = await TaskModel.countDocuments({ department: "HR", status: "Closed" });
-
-    const closedOnes = [strategyClosed, financeClosed, qualityClosed, maintClosed,storeClosed, hrClosed];
-    const totalOnes = [totalStrategy, totalFinance, totalQuality, totalMaint, totalStore, totalHR];
-    const statCategory = ['STR', 'FIN', 'QLT', 'MAN', 'STO', 'HR'];
-
-
-    res.status(200).send({totalOnes,closedOnes,statCategory})
+    res.status(200).send({totalOnes, closedOnes, statCategory})
   } 
   
   catch (err) {
     console.log(err);
-    res.status(500).send("Internal Server Error");
+    res.send("Internal Server Error");
   }
 })
 
