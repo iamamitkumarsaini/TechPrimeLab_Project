@@ -124,17 +124,29 @@ taskRoutes.patch("/project/:id", async(req,res) => {
 taskRoutes.get("/projects/stats", async(req,res) => {
 
   try {
-    const total_Projects = await TaskModel.countDocuments();
-    const closed_Projects = await TaskModel.countDocuments({ status: "Closed" });
-    const running_Projects = await TaskModel.countDocuments({ status: "Running" });
-    const cancelled_Projects = await TaskModel.countDocuments({ status: "Cancelled" });
+
     const currDate = formattedDate();
 
-    const closure_Delay = await TaskModel.find({end_date: {$lt: currDate}}).countDocuments();
+      const pipeline = [
+    {
+      $group: {
+        _id: null,
+        total_Projects: { $sum: 1 },
+        closed_Projects: { $sum: { $cond: [{ $eq: ["$status", "Closed"] }, 1, 0] } },
+        running_Projects: { $sum: { $cond: [{ $eq: ["$status", "Running"] }, 1, 0] } },
+        cancelled_Projects: { $sum: { $cond: [{ $eq: ["$status", "Cancelled"] }, 1, 0] } },
+        closure_Delay: { $sum: { $cond: [{ $lt: ["$end_date", currDate] }, 1, 0] } }
+      }
+    }
+  ];
+
+    const [result] = await TaskModel.aggregate(pipeline).exec();
+    console.log("result", result)
+    const { total_Projects, closed_Projects, running_Projects, cancelled_Projects, closure_Delay } = result;
 
     res.status(200).send({total_Projects,closed_Projects,running_Projects,cancelled_Projects,closure_Delay})
 
-  } 
+  }
   
   catch (err) {
     console.log(err);
@@ -146,27 +158,30 @@ taskRoutes.get("/projects/stats", async(req,res) => {
 taskRoutes.get("/projects/departments", async(req,res) => {
 
   try {
-    
-    const departments = {
-      Strategy: 'STR',
-      Finance: 'FIN',
-      Quality: 'QLT',
-      Maintenance: 'MAN',
-      Store: 'STO',
-      HR: 'HR'
-    };
 
-    let totalOnes = [];
-    let closedOnes = [];
+    const pipeline = [
+      {
+        $group:{
+          _id: "$department",
+          total: {$sum: 1},
+          closed: {$sum:{$cond: [{$eq: ["$status", "Closed"]},1,0]}}
+        }
+      },
+      {
+        $project: {
+          _id:0,
+          department: "$_id",
+          total: 1,
+          closed:1
+        }
+      }
+    ];
 
-    for (const department in departments) {
-      const total = await TaskModel.countDocuments({ department });
-      const closed = await TaskModel.countDocuments({ department, status: 'Closed' });
-      totalOnes.push(total);
-      closedOnes.push(closed);
-    }
+    const results = await TaskModel.aggregate(pipeline);
 
-    const statCategory = Object.values(departments);
+    const totalOnes = results.map((result) => result.total);
+    const closedOnes = results.map((result) => result.closed);
+    const statCategory = results.map((result) => result.department);
 
     res.status(200).send({totalOnes, closedOnes, statCategory})
   } 
